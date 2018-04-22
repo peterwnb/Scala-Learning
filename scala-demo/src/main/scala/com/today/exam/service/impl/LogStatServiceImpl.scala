@@ -1,7 +1,5 @@
 package com.today.exam.service.impl
 
-import java.io.PrintWriter
-
 import com.today.day01.FileTest.DATE_FORMAT
 import com.today.exam.service.LogStatService
 import com.today.exam.vo.LogInfoVo
