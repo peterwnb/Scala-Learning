@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:soa="http://soa-springtag.dapeng.com/schema/service"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://soa-springtag.dapeng.com/schema/service
+        http://soa-springtag.dapeng.com/schema/service/service.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--参数配置-->
+    <context:property-placeholder location="classpath:config.properties" local-override="false"
+                                  system-properties-mode="ENVIRONMENT"/>
+
+    <context:component-scan base-package="com.today.*"/>
+
+    <bean id="slf4j-filter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="3000"/>
+        <property name="logSlowSql" value="true"/>
+    </bean>
+
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1">
+            <list>
+                <bean name="slaver" class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="192.168.20.125"/>
+                    <constructor-arg index="1" value="6004" type="int"/>
+                </bean>
+                <bean name="master" class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="192.168.20.125"/>
+                    <constructor-arg index="1" value="6004" type="int"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="2048" />
+        <property name="maxIdle" value="200" />
+        <property name="numTestsPerEvictionRun" value="1024"/>
+        <property name="timeBetweenEvictionRunsMillis" value="30000" />
+        <property name="minEvictableIdleTimeMillis" value="-1" />
+        <property name="softMinEvictableIdleTimeMillis" value="10000" />
+        <property name="maxWaitMillis" value="1500"/>
+        <property name="testOnBorrow" value="true" />
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="jmxEnabled" value="true"/>
+        <property name="jmxNamePrefix" value="youyuan"/>
+        <property name="blockWhenExhausted" value="false"/>
+    </bean>
+</beans>
