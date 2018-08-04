@@ -77,7 +77,7 @@ object FileTest {
 //        k.group(11))
 //    ).toMap
 //
-//    val out = new PrintWriter("E:\\work\\scala-learn\\scala-demo\\src\\main\\resources\\data\\res.log")
+//    val out = new PrintWriter("E:\\work\\scala-learn\\scala-demo\\src\\main\\resources\\data\\consumeTimeAvg.log")
 //    println("-----------")
 //
 //    res.keys.map(key =>
